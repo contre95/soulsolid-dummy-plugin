@@ -30,8 +30,7 @@ jobs:
         fi
          go build -buildmode=plugin -ldflags "$LDFLAGS" -o "$OUTPUT" .
          echo "output_file=$OUTPUT" >> $GITHUB_OUTPUT
-
-     - name: Upload release asset
+    - name: Upload release asset
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v2
       with:
