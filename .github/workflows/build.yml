@@ -21,10 +21,10 @@ jobs:
     - name: Build plugin
       id: build
       run: |
-        if [ "${{ github.event_name }}" = "release" ]; then
-          VERSION="${{ github.ref_name }}"
-          OUTPUT="dummy-$VERSION.so"
-          LDFLAGS="-X github.com/contre95/soulsolid-dummy-plugin/dummy.Version=$VERSION"
+         if [ "${{ github.event_name }}" = "release" ]; then
+           VERSION="${{ github.ref_name }}"
+           OUTPUT="plugin.so"
+           LDFLAGS="-X github.com/contre95/soulsolid-dummy-plugin/dummy.Version=$VERSION"
         else
           OUTPUT="dummy.so"
           LDFLAGS=""
