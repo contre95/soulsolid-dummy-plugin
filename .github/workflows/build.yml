@@ -16,14 +16,14 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.25'
+        go-version: 1.22
     - name: Build plugin
       id: build
       run: |
-         if [ "${{ github.event_name }}" = "release" ]; then
-           VERSION="${{ github.ref_name }}"
-           OUTPUT="plugin.so"
-           LDFLAGS="-X github.com/contre95/soulsolid-dummy-plugin/dummy.Version=$VERSION"
+        if [ "${{ github.event_name }}" = "release" ]; then
+          VERSION="${{ github.ref_name }}"
+          OUTPUT="plugin.so"
+          LDFLAGS="-X github.com/contre95/soulsolid-dummy-plugin/dummy.Version=$VERSION"
         else
           OUTPUT="dummy.so"
           LDFLAGS=""
