@@ -8,6 +8,9 @@ import (
 	"github.com/contre95/soulsolid/src/music"
 )
 
+// Version holds the version of the plugin
+var Version string
+
 // DummyDownloader implements the Downloader interface with hardcoded data
 type DummyDownloader struct{}
 
@@ -228,9 +231,13 @@ func (d *DummyDownloader) DownloadAlbum(albumID string) (*music.Album, error) {
 
 // GetStatus returns the current status of the dummy downloader
 func (d *DummyDownloader) GetStatus() downloading.DownloaderStatus {
+	message := "Demo mode active"
+	if Version != "" {
+		message += " (v" + Version + ")"
+	}
 	return downloading.DownloaderStatus{
 		Name:    "dummy",
 		Status:  "valid",
-		Message: "Demo mode active",
+		Message: message,
 	}
 }
