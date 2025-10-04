@@ -4,6 +4,8 @@ go 1.25.0
 
 require github.com/contre95/soulsolid v0.0.0-20251003192247-4a50dcef1574
 
+replace github.com/contre95/soulsolid => ../soulsolid
+
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 // indirect
