@@ -6,6 +6,6 @@ import (
 )
 
 // NewDownloader creates a new dummy downloader instance
-func NewDownloader(cfg map[string]interface{}, embeddedArtworkSize int) (downloading.Downloader, error) {
+func NewDownloader(cfg map[string]interface{}) (downloading.Downloader, error) {
 	return dummy.NewDummyDownloader(), nil
 }
