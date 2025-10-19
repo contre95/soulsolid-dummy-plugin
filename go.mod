@@ -2,7 +2,7 @@ module github.com/contre95/soulsolid-dummy-plugin
 
 go 1.25.0
 
-require github.com/contre95/soulsolid v1.0.0
+require github.com/contre95/soulsolid v0.1.4
 
 // replace github.com/contre95/soulsolid => ../soulsolid // Used for local dev
 
@@ -15,7 +15,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
