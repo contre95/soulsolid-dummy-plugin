@@ -2,7 +2,9 @@ module github.com/contre95/soulsolid-dummy-plugin
 
 go 1.25.0
 
-require github.com/contre95/soulsolid v0.0.2
+require github.com/contre95/soulsolid v1.0.0
+
+// replace github.com/contre95/soulsolid => ../soulsolid // Used for local dev
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect

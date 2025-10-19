@@ -2,6 +2,7 @@ package dummy
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/contre95/soulsolid/src/features/downloading"
@@ -193,14 +194,21 @@ func (d *DummyDownloader) GetChartTracks(limit int) ([]music.Track, error) {
 }
 
 // DownloadTrack returns a dummy track with hardcoded audio data
-func (d *DummyDownloader) DownloadTrack(trackID string, progressCallback func(downloaded, total int64)) (*music.Track, error) {
+func (d *DummyDownloader) DownloadTrack(trackID string, downloadDir string, progressCallback func(downloaded, total int64)) (*music.Track, error) {
 	track := dummyTrack()
 	track.ID = trackID
-	track.Data = dummyAudioData()
+	track.Path = fmt.Sprintf("%s/%s.mp3", downloadDir, trackID)
+
+	// Write dummy audio data to file
+	audioData := dummyAudioData()
+	err := os.WriteFile(track.Path, audioData, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("failed to write dummy audio file: %w", err)
+	}
 
 	// Simulate progress
 	if progressCallback != nil {
-		total := int64(len(track.Data))
+		total := int64(1000) // dummy total
 		for downloaded := int64(0); downloaded <= total; downloaded += total / 10 {
 			progressCallback(downloaded, total)
 		}
@@ -209,24 +217,35 @@ func (d *DummyDownloader) DownloadTrack(trackID string, progressCallback func(do
 	return track, nil
 }
 
-// DownloadAlbum returns a dummy album with tracks
-func (d *DummyDownloader) DownloadAlbum(albumID string) (*music.Album, error) {
-	album := dummyAlbum()
-	album.ID = albumID
-
-	// Add tracks to the album
+// DownloadAlbum returns dummy tracks for an album
+func (d *DummyDownloader) DownloadAlbum(albumID string, downloadDir string, progressCallback func(downloaded, total int64)) ([]*music.Track, error) {
 	tracks := make([]*music.Track, 10)
 	for i := range tracks {
 		track := dummyTrack()
 		track.ID = fmt.Sprintf("%s-track-%d", albumID, i+1)
 		track.Title = fmt.Sprintf("Track %d", i+1)
 		track.Metadata.TrackNumber = i + 1
-		track.Data = dummyAudioData()
+		track.Path = fmt.Sprintf("%s/%s.mp3", downloadDir, track.ID)
+
+		// Write dummy audio data to file
+		audioData := dummyAudioData()
+		err := os.WriteFile(track.Path, audioData, 0644)
+		if err != nil {
+			return nil, fmt.Errorf("failed to write dummy audio file for track %d: %w", i+1, err)
+		}
+
 		tracks[i] = track
 	}
-	album.Tracks = tracks
 
-	return album, nil
+	// Simulate progress
+	if progressCallback != nil {
+		total := int64(10000) // dummy total
+		for downloaded := int64(0); downloaded <= total; downloaded += total / 10 {
+			progressCallback(downloaded, total)
+		}
+	}
+
+	return tracks, nil
 }
 
 // GetStatus returns the current status of the dummy downloader
