@@ -25,6 +25,14 @@ func (d *DummyDownloader) Name() string {
 	return "Dummy"
 }
 
+// Capabilities returns the capabilities of this downloader
+func (d *DummyDownloader) Capabilities() downloading.DownloaderCapabilities {
+	return downloading.DownloaderCapabilities{
+		SupportsSearch:      true,
+		SupportsDirectLinks: true, // Dummy supports direct links for testing
+	}
+}
+
 // GetUserInfo returns hardcoded user information
 func (d *DummyDownloader) GetUserInfo() *downloading.UserInfo {
 	return &downloading.UserInfo{
@@ -259,4 +267,14 @@ func (d *DummyDownloader) GetStatus() downloading.DownloaderStatus {
 		Status:  "valid",
 		Message: message,
 	}
+}
+
+// SupportedSearchTypes returns supported search types for Dummy
+func (d *DummyDownloader) SupportedSearchTypes() []string {
+	return []string{"tracks"}
+}
+
+// SearchLinks is not supported for Dummy
+func (d *DummyDownloader) SearchLinks(query string, limit int) ([]music.Album, error) {
+	return nil, fmt.Errorf("link search not supported for Dummy")
 }
