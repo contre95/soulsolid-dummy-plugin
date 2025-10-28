@@ -3,6 +3,7 @@ package dummy
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/contre95/soulsolid/src/features/downloading"
@@ -254,6 +255,33 @@ func (d *DummyDownloader) DownloadAlbum(albumID string, downloadDir string, prog
 	}
 
 	return tracks, nil
+}
+
+// DownloadLink downloads tracks from a direct link
+func (d *DummyDownloader) DownloadLink(url string, downloadDir string, progressCallback func(downloaded, total int64)) ([]*music.Track, error) {
+	// For dummy, parse the URL and return dummy tracks
+	if strings.Contains(url, "/album/") {
+		parts := strings.Split(url, "/album/")
+		if len(parts) > 1 {
+			albumID := strings.Split(parts[1], "/")[0]
+			if albumID != "" {
+				return d.DownloadAlbum(albumID, downloadDir, progressCallback)
+			}
+		}
+	} else if strings.Contains(url, "/track/") {
+		parts := strings.Split(url, "/track/")
+		if len(parts) > 1 {
+			trackID := strings.Split(parts[1], "/")[0]
+			if trackID != "" {
+				track, err := d.DownloadTrack(trackID, downloadDir, progressCallback)
+				if err != nil {
+					return nil, err
+				}
+				return []*music.Track{track}, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("unsupported URL format for dummy downloader")
 }
 
 // GetStatus returns the current status of the dummy downloader
