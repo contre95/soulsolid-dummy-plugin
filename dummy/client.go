@@ -31,6 +31,7 @@ func (d *DummyDownloader) Capabilities() downloading.DownloaderCapabilities {
 	return downloading.DownloaderCapabilities{
 		SupportsSearch:      true,
 		SupportsDirectLinks: true, // Dummy supports direct links for testing
+		SupportsChartTracks: true,
 	}
 }
 
