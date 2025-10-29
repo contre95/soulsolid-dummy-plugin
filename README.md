@@ -55,9 +55,20 @@ go build -buildmode=plugin -o mydownloader.so .
 
 ## Configuration
 
-Plugins receive their configuration through the `NewDownloader` function as a `map[string]interface{}`. The configuration comes from the Soulsolid config file.
+Plugins receive their configuration through the `NewDownloader` function as a `map[string]interface{}`. The configuration comes from the SoulSolid config file.
 
-Example config.yaml:
+To enable the dummy plugin in SoulSolid, add the following to your configuration:
+
+```yaml
+downloaders:
+  plugins:
+    - name: "dummy"
+      enabled: true
+      path: "../soulsolid-dummy-plugin/plugin.so"
+      icon: https://demo2.contre.io/img/galaxy.png
+```
+
+For a general plugin example:
 
 ```yaml
 downloaders:
