@@ -171,6 +171,25 @@ func (d *DummyDownloader) SearchTracks(query string, limit int) ([]music.Track, 
 	return results, nil
 }
 
+// SearchArtists returns dummy artist search results
+func (d *DummyDownloader) SearchArtists(query string, limit int) ([]music.Artist, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	if limit > 50 {
+		limit = 50
+	}
+
+	results := make([]music.Artist, 0, limit)
+	for i := 0; i < limit; i++ {
+		artist := *dummyArtist()
+		artist.ID = fmt.Sprintf("dummy-artist-%d", i+1)
+		artist.Name = fmt.Sprintf("Demo Artist %d", i+1)
+		results = append(results, artist)
+	}
+	return results, nil
+}
+
 // GetAlbumTracks returns dummy tracks for an album
 func (d *DummyDownloader) GetAlbumTracks(albumID string) ([]music.Track, error) {
 	tracks := make([]music.Track, 10)
@@ -182,6 +201,18 @@ func (d *DummyDownloader) GetAlbumTracks(albumID string) ([]music.Track, error) 
 		tracks[i] = track
 	}
 	return tracks, nil
+}
+
+// GetArtistAlbums returns dummy albums for an artist
+func (d *DummyDownloader) GetArtistAlbums(artistID string) ([]music.Album, error) {
+	albums := make([]music.Album, 5)
+	for i := range albums {
+		album := *dummyAlbum()
+		album.ID = fmt.Sprintf("%s-album-%d", artistID, i+1)
+		album.Title = fmt.Sprintf("Artist Album %d", i+1)
+		albums[i] = album
+	}
+	return albums, nil
 }
 
 // GetChartTracks returns dummy chart tracks
@@ -234,6 +265,37 @@ func (d *DummyDownloader) DownloadAlbum(albumID string, downloadDir string, prog
 		track := dummyTrack()
 		track.ID = fmt.Sprintf("%s-track-%d", albumID, i+1)
 		track.Title = fmt.Sprintf("Track %d", i+1)
+		track.Metadata.TrackNumber = i + 1
+		track.Path = fmt.Sprintf("%s/%s.mp3", downloadDir, track.ID)
+
+		// Write dummy audio data to file
+		audioData := dummyAudioData()
+		err := os.WriteFile(track.Path, audioData, 0644)
+		if err != nil {
+			return nil, fmt.Errorf("failed to write dummy audio file for track %d: %w", i+1, err)
+		}
+
+		tracks[i] = track
+	}
+
+	// Simulate progress
+	if progressCallback != nil {
+		total := int64(10000) // dummy total
+		for downloaded := int64(0); downloaded <= total; downloaded += total / 10 {
+			progressCallback(downloaded, total)
+		}
+	}
+
+	return tracks, nil
+}
+
+// DownloadArtist returns dummy tracks for an artist
+func (d *DummyDownloader) DownloadArtist(artistID string, downloadDir string, progressCallback func(downloaded, total int64)) ([]*music.Track, error) {
+	tracks := make([]*music.Track, 10)
+	for i := range tracks {
+		track := dummyTrack()
+		track.ID = fmt.Sprintf("%s-track-%d", artistID, i+1)
+		track.Title = fmt.Sprintf("Artist Track %d", i+1)
 		track.Metadata.TrackNumber = i + 1
 		track.Path = fmt.Sprintf("%s/%s.mp3", downloadDir, track.ID)
 
