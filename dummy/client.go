@@ -366,6 +366,6 @@ func (d *DummyDownloader) SupportedSearchTypes() []string {
 }
 
 // SearchLinks is not supported for Dummy
-func (d *DummyDownloader) SearchLinks(query string, limit int) ([]music.Album, error) {
+func (d *DummyDownloader) SearchLinks(query string, limit int) (*downloading.LinkResult, error) {
 	return nil, fmt.Errorf("link search not supported for Dummy")
 }
